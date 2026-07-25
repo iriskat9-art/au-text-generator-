@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AU iMessage</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+<!-- IPHONE -->
+
+<div class="phone">
+
+
+<div class="dynamic"></div>
+
+
+<div class="status">
+<span>9:41</span>
+<span>5G 🔋</span>
+</div>
+
+
+
+<div class="header">
+
+<div class="back">‹</div>
+
+<div class="group-photo"></div>
+
+<div class="chat-name" id="chatTitle">
+Новый чат
+</div>
+
+<div class="info">
+ⓘ
+</div>
+
+</div>
+
+
+
+
+<div class="messages" id="messages">
+
+</div>
+
+
+
+
+<div class="input-area">
+
+<div class="plus">
++
+</div>
+
+<div class="input-preview">
+iMessage
+</div>
+
+<div>
+🎤
+</div>
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+<!-- SETTINGS -->
+
+
+<div class="panel">
+
+
+<h2>
+AU Generator
+</h2>
+
+
+
+<h3>
+Чаты
+</h3>
+
+
+<input id="chatName" placeholder="Название чата">
+
+
+<button onclick="newChat()">
+Создать чат
+</button>
+
+
+<div id="chatList"></div>
+
+
+
+
+<hr>
+
+
+
+<h3>
+Персонажи
+</h3>
+
+
+<input id="characterName" placeholder="Имя персонажа">
+
+
+<button onclick="addCharacter()">
+Добавить
+</button>
+
+
+<select id="characterSelect">
+
+<option>
+Выбери персонажа
+</option>
+
+</select>
+
+
+
+
+<hr>
+
+
+
+
+<h3>
+Сообщение
+</h3>
+
+
+<textarea 
+id="messageText"
+placeholder="Текст">
+</textarea>
+
+
+
+<select id="type">
+
+<option value="other">
+От персонажа
+</option>
+
+
+<option value="me">
+Моё сообщение
+</option>
+
+
+</select>
+
+
+
+<button onclick="sendMessage()">
+Добавить
+</button>
+
+
+
+<button onclick="deleteCurrentChat()" class="delete">
+Удалить чат
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+<script src="app.js"></script>
+
+
+</body>
+
+</html>
