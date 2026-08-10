@@ -35,7 +35,7 @@ function updateChatHeader(){
   const title=document.getElementById("chatTitle"),avatar=document.getElementById("chatAvatar"),character=getFirstChatCharacter(currentChat),photo=getChatPhoto(currentChat);
   title.innerText=currentChat||"Новый чат";
   avatar.style.backgroundImage=photo?`url("${photo}")`:"";
-  avatar.innerText=photo?"":(character?character.name[0].toUpperCase():"");
+  avatar.innerText=photo?"":(character&&character.name?character.name[0].toUpperCase():"");
 }
 function updateChatAvatarEditor(){
   const editor=document.getElementById("chatAvatarEditor");if(!editor)return;
@@ -44,7 +44,7 @@ function updateChatAvatarEditor(){
   editor.style.display="block";
   const photo=getChatPhoto(currentChat);
   preview.style.backgroundImage=photo?`url("${photo}")`:"";
-  preview.innerText=photo?"":(character?character.name[0].toUpperCase():"");
+  preview.innerText=photo?"":(character&&character.name?character.name[0].toUpperCase():"");
   removeButton.classList.toggle("visible",!!chatPhotos[currentChat]);
 }
 function handleChatPhoto(event){
@@ -92,18 +92,31 @@ function sendMessage(){
 }
 function showMessage(msg,index){
   const div=document.createElement("div");
+
   if(msg.type==="me"){
-    div.className="message me";div.innerHTML=`<div class="message-content"><div class="bubble my-bubble">${escapeHTML(msg.text)}${msg.photo?`<img class="message-photo" src="${msg.photo}" alt="Фото">`:""}</div></div>`;messagesBox.appendChild(div);return;
+    div.className="message me";
+    const bubble=`<div class="bubble my-bubble">${escapeHTML(msg.text)}${msg.photo?`<img class="message-photo" src="${msg.photo}" alt="Фото">`:""}</div>`;
+    div.innerHTML=`<div class="message-content">${bubble}</div>`;
+    messagesBox.appendChild(div);
+    return;
   }
+
   const previous=index>0?chats[currentChat][index-1]:null;
-  const sameContact=previous&&previous.type==="other"&&previous.author===msg.author;
-  const showAuthor=!sameContact;
+  const sameContact=!!(previous&&previous.type==="other"&&previous.author===msg.author);
   const character=getCharacter(msg.author);
-  div.className=showAuthor?"message message-first":"message message-continuation";
-  const avatarHtml=character&&character.photo?`<div class="avatar avatar-photo" style="background-image:url(\"${character.photo}\")"></div>`:`<div class="avatar">${escapeHTML(msg.author?msg.author[0].toUpperCase():"")}</div>`;
   const bubble=`<div class="bubble other-bubble">${escapeHTML(msg.text)}${msg.photo?`<img class="message-photo" src="${msg.photo}" alt="Фото">`:""}</div>`;
-  if(showAuthor){div.innerHTML=`<div class="message-side">${avatarHtml}</div><div class="message-content"><div class="name">${escapeHTML(msg.author)}</div>${bubble}</div>`;}
-  else{div.innerHTML=`<div class="message-content">${bubble}</div>`;}
+
+  if(!sameContact){
+    div.className="message message-first";
+    const avatar=character&&character.photo
+      ?`<div class="avatar avatar-photo" style="background-image:url("${character.photo}")"></div>`
+      :`<div class="avatar">${escapeHTML(character&&character.name?character.name[0].toUpperCase():msg.author&&msg.author[0]?msg.author[0].toUpperCase():"")}</div>`;
+    div.innerHTML=`<div class="message-side">${avatar}</div><div class="message-content"><div class="name">${escapeHTML(msg.author)}</div>${bubble}</div>`;
+  }else{
+    div.className="message message-continuation";
+    // Продолжение того же контакта: никакого аватара, буквы, ?, emoji или пустого элемента.
+    div.innerHTML=`<div class="message-content">${bubble}</div>`;
+  }
   messagesBox.appendChild(div);
 }
 function escapeHTML(value){return String(value||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;").replace(/\n/g,"<br>");}
