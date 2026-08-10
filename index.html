@@ -42,6 +42,18 @@
             <button onclick="newChat()">Создать</button>
         </div>
         <div id="chatList" class="chat-list"></div>
+
+        <div class="avatar-editor chat-avatar-editor" id="chatAvatarEditor" style="display:none">
+            <div class="avatar-editor-title">Аватар чата</div>
+            <div class="avatar-editor-row">
+                <div class="avatar-preview" id="chatAvatarPreview"></div>
+                <div class="avatar-editor-actions">
+                    <input id="chatPhotoInput" type="file" accept="image/*" onchange="handleChatPhoto(event)">
+                    <button type="button" class="attach-button" onclick="document.getElementById('chatPhotoInput').click()">📷 Добавить фото</button>
+                    <button type="button" id="removeChatPhoto" class="remove-photo" onclick="removeChatPhoto()">Убрать фото</button>
+                </div>
+            </div>
+        </div>
     </section>
 
     <section class="panel-section">
@@ -57,7 +69,7 @@
         <div class="avatar-editor">
             <div class="avatar-editor-title">Аватар персонажа</div>
             <div class="avatar-editor-row">
-                <div class="avatar-preview" id="characterAvatarPreview">?</div>
+                <div class="avatar-preview" id="characterAvatarPreview"></div>
                 <div class="avatar-editor-actions">
                     <input id="characterPhotoInput" type="file" accept="image/*" onchange="handleCharacterPhoto(event)">
                     <button type="button" class="attach-button" onclick="document.getElementById('characterPhotoInput').click()">📷 Добавить фото</button>
@@ -89,7 +101,6 @@
         </div>
 
         <img id="photoPreview" class="photo-preview" alt="Предпросмотр">
-
         <button class="send-button" onclick="sendMessage()">Добавить сообщение</button>
     </section>
 
