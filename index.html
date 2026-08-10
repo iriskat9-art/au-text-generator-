@@ -18,7 +18,7 @@
 
     <div class="header">
         <div class="back">‹</div>
-        <div class="group-photo"></div>
+        <div class="group-photo" id="chatAvatar"></div>
         <div class="chat-name" id="chatTitle">Новый чат</div>
         <div class="info">ⓘ</div>
     </div>
@@ -53,6 +53,18 @@
         <select id="characterSelect">
             <option value="">Выбери персонажа</option>
         </select>
+
+        <div class="avatar-editor">
+            <div class="avatar-editor-title">Аватар персонажа</div>
+            <div class="avatar-editor-row">
+                <div class="avatar-preview" id="characterAvatarPreview">?</div>
+                <div class="avatar-editor-actions">
+                    <input id="characterPhotoInput" type="file" accept="image/*" onchange="handleCharacterPhoto(event)">
+                    <button type="button" class="attach-button" onclick="document.getElementById('characterPhotoInput').click()">📷 Добавить фото</button>
+                    <button type="button" id="removeCharacterPhoto" class="remove-photo" onclick="removeCharacterPhoto()">Убрать фото</button>
+                </div>
+            </div>
+        </div>
     </section>
 
     <section class="message-editor">
