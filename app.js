@@ -17,6 +17,7 @@ function handleChatPhoto(event){const file=event.target.files[0];if(!file||!curr
 function removeChatPhoto(){if(!currentChat)return;chatPhotos[currentChat]="";document.getElementById("chatPhotoInput").value="";saveData();updateChatHeader();updateChatAvatarEditor();}
 function openChat(name){currentChat=name;messagesBox.innerHTML="";updateChatHeader();updateChatAvatarEditor();(chats[name]||[]).forEach((msg,index)=>showMessage(msg,index));messagesBox.scrollTop=messagesBox.scrollHeight;}
 function deleteCurrentChat(){if(!currentChat)return;delete chats[currentChat];delete chatPhotos[currentChat];currentChat=null;saveData();messagesBox.innerHTML="";updateChatHeader();updateChatAvatarEditor();renderChats();}
+function deleteLastMessage(){if(!currentChat||!chats[currentChat]||!chats[currentChat].length)return;chats[currentChat].pop();saveData();openChat(currentChat);}
 function addCharacter(){const input=document.getElementById("characterName"),name=input.value.trim();if(!name||characters.some(c=>c.name===name))return;characters.push({name,photo:""});saveData();renderCharacters();input.value="";}
 function renderCharacters(){const select=document.getElementById("characterSelect");select.innerHTML='<option value="">Выбери персонажа</option>';characters.forEach(c=>{const option=document.createElement("option");option.value=c.name;option.innerText=c.name;select.appendChild(option);});}
 function getCharacter(name){return characters.find(c=>c.name===name);}
