@@ -4,17 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AU iMessage</title>
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
 <div class="app">
 <div class="phone">
     <div class="dynamic"></div>
     <div class="status"><span>9:41</span><span>5G 🔋</span></div>
-    <div class="header">
-        <div class="back">‹</div><div class="group-photo" id="chatAvatar"></div>
-        <div class="chat-name" id="chatTitle">Новый чат</div><div class="info">ⓘ</div>
-    </div>
+    <div class="header"><div class="back">‹</div><div class="group-photo" id="chatAvatar"></div><div class="chat-name" id="chatTitle">Новый чат</div><div class="info">ⓘ</div></div>
     <div class="messages" id="messages"></div>
     <div class="input-area"><button class="input-plus" onclick="document.getElementById('photoInput').click()">+</button><div class="input-preview">iMessage</div><div class="mic">🎤</div></div>
 </div>
@@ -24,31 +21,13 @@
         <h3>Чаты</h3>
         <div class="field-row"><input id="chatName" placeholder="Название чата"><button onclick="newChat()">Создать</button></div>
         <div id="chatList" class="chat-list"></div>
-        <div class="avatar-editor chat-avatar-editor" id="chatAvatarEditor" style="display:none">
-            <div class="avatar-editor-title">Аватар чата</div>
-            <div class="avatar-editor-row"><div class="avatar-preview" id="chatAvatarPreview"></div><div class="avatar-editor-actions">
-                <input id="chatPhotoInput" type="file" accept="image/*" onchange="handleChatPhoto(event)">
-                <button type="button" class="attach-button" onclick="document.getElementById('chatPhotoInput').click()">📷 Добавить фото</button>
-                <button type="button" id="removeChatPhoto" class="remove-photo" onclick="removeChatPhoto()">Убрать фото</button>
-            </div></div>
-        </div>
+        <div class="avatar-editor chat-avatar-editor" id="chatAvatarEditor" style="display:none"><div class="avatar-editor-title">Аватар чата</div><div class="avatar-editor-row"><div class="avatar-preview" id="chatAvatarPreview"></div><div class="avatar-editor-actions"><input id="chatPhotoInput" type="file" accept="image/*" onchange="handleChatPhoto(event)"><button type="button" class="attach-button" onclick="document.getElementById('chatPhotoInput').click()">📷 Добавить фото</button><button type="button" id="removeChatPhoto" class="remove-photo" onclick="removeChatPhoto()">Убрать фото</button></div></div></div>
     </section>
-    <section class="panel-section">
-        <h3>Персонажи</h3>
-        <div class="field-row"><input id="characterName" placeholder="Имя персонажа"><button onclick="addCharacter()">Добавить</button></div>
-        <select id="characterSelect"><option value="">Выбери персонажа</option></select>
-    </section>
-    <section class="message-editor">
-        <div class="editor-header"><h3>Новое сообщение</h3><span>⌘ Enter — отправить</span></div>
-        <div class="message-type-toggle"><select id="type"><option value="other">От персонажа</option><option value="me">Моё сообщение</option></select></div>
-        <textarea id="messageText" placeholder="Напишите сообщение..."></textarea>
-        <div class="attachment-row"><input id="photoInput" type="file" accept="image/*" onchange="handlePhoto(event)"><button type="button" class="attach-button" onclick="attachPhoto()">📷 Фото</button><button type="button" id="removePhoto" class="remove-photo" onclick="removePhoto()">Убрать</button></div>
-        <img id="photoPreview" class="photo-preview" alt="Предпросмотр">
-        <button class="send-button" onclick="sendMessage()">Добавить сообщение</button>
-    </section>
+    <section class="panel-section"><h3>Персонажи</h3><div class="field-row"><input id="characterName" placeholder="Имя персонажа"><button onclick="addCharacter()">Добавить</button></div><select id="characterSelect"><option value="">Выбери персонажа</option></select></section>
+    <section class="message-editor"><div class="editor-header"><h3>Новое сообщение</h3><span>⌘ Enter — отправить</span></div><div class="message-type-toggle"><select id="type"><option value="other">От персонажа</option><option value="me">Моё сообщение</option></select></div><textarea id="messageText" placeholder="Напишите сообщение..."></textarea><div class="attachment-row"><input id="photoInput" type="file" accept="image/*" onchange="handlePhoto(event)"><button type="button" class="attach-button" onclick="attachPhoto()">📷 Фото</button><button type="button" id="removePhoto" class="remove-photo" onclick="removePhoto()">Убрать</button></div><img id="photoPreview" class="photo-preview" alt="Предпросмотр"><button class="send-button" onclick="sendMessage()">Добавить сообщение</button></section>
     <button onclick="deleteCurrentChat()" class="delete">Удалить текущий чат</button>
 </div>
 </div>
-<script src="app.js?v=7"></script>
+<script src="app.js?v=8"></script>
 </body>
 </html>
