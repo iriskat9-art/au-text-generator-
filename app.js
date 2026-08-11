@@ -6,12 +6,7 @@ const messagesBox = document.getElementById("messages");
 const STORAGE_KEY = "auGeneratorData";
 
 function saveData(){ localStorage.setItem(STORAGE_KEY, JSON.stringify({chats,characters,chatPhotos})); }
-function loadData(){
-  try{
-    const saved=JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if(saved){ chats=saved.chats||{}; characters=(saved.characters||[]).map(c=>typeof c==='string'?{name:c,photo:""}:c); chatPhotos=saved.chatPhotos||{}; }
-  }catch(e){ chats={}; characters=[]; chatPhotos={}; }
-}
+function loadData(){try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY));if(saved){chats=saved.chats||{};characters=(saved.characters||[]).map(c=>typeof c==='string'?{name:c,photo:""}:c);chatPhotos=saved.chatPhotos||{};}}catch(e){chats={};characters=[];chatPhotos={};}}
 window.onload=function(){loadData();renderChats();renderCharacters();const firstChat=Object.keys(chats)[0];if(firstChat)openChat(firstChat);};
 function newChat(){const name=document.getElementById("chatName").value.trim();if(!name)return;if(!chats[name])chats[name]=[];if(chatPhotos[name]===undefined)chatPhotos[name]="";saveData();renderChats();openChat(name);document.getElementById("chatName").value="";}
 function renderChats(){const box=document.getElementById("chatList");box.innerHTML="";Object.keys(chats).forEach(name=>{const div=document.createElement("div");div.className="chat-item";const button=document.createElement("button");button.innerText=name;button.onclick=()=>openChat(name);div.appendChild(button);box.appendChild(div);});}
@@ -33,38 +28,10 @@ document.getElementById("characterSelect").addEventListener("change",updateChara
 function attachPhoto(){document.getElementById("photoInput").click();}
 function handlePhoto(event){const file=event.target.files[0];if(!file||!file.type.startsWith("image/"))return;const reader=new FileReader();reader.onload=function(){const preview=document.getElementById("photoPreview");preview.src=reader.result;preview.classList.add("visible");document.getElementById("removePhoto").classList.add("visible");};reader.readAsDataURL(file);}
 function removePhoto(){const input=document.getElementById("photoInput"),preview=document.getElementById("photoPreview");input.value="";preview.removeAttribute("src");preview.classList.remove("visible");document.getElementById("removePhoto").classList.remove("visible");}
-function sendMessage(){
-  if(!currentChat)return;
-  const type=document.getElementById("type").value;
-  const text=document.getElementById("messageText").value.trim();
-  const author=type==="me"?"me":document.getElementById("characterSelect").value;
-  const preview=document.getElementById("photoPreview");
-  const photo=preview.classList.contains("visible")&&preview.getAttribute("src")?preview.getAttribute("src"):"";
-  if(!text&&!photo)return;
-  if(type==="other"&&!author)return;
-  chats[currentChat].push({author,text,type,photo});
-  saveData();
-  openChat(currentChat);
-  document.getElementById("messageText").value="";
-  removePhoto();
-}
-function showMessage(msg,index){
-  const div=document.createElement("div");
-  if(msg.type==="me"){
-    div.className="message me";
-    div.innerHTML=`<div class="message-content"><div class="bubble my-bubble">${escapeHTML(msg.text)}${msg.photo?`<img class="message-photo" src="${msg.photo}" alt="Фото">`:""}</div></div>`;
-    messagesBox.appendChild(div);return;
-  }
-  const previous=index>0?chats[currentChat][index-1]:null;
-  const sameContact=previous&&previous.type==="other"&&previous.author===msg.author;
-  const showAuthor=!sameContact;
-  const character=getCharacter(msg.author);
-  div.className="message"+(showAuthor?" message-first":" message-continuation");
-  const bubble=`<div class="bubble other-bubble">${escapeHTML(msg.text)}${msg.photo?`<img class="message-photo" src="${msg.photo}" alt="Фото">`:""}</div>`;
-  if(showAuthor){const avatarHtml=character&&character.photo?`<div class="avatar avatar-photo" style="background-image:url(\"${character.photo}\")"></div>`:`<div class="avatar">${escapeHTML(msg.author?msg.author[0].toUpperCase():"")}</div>`;div.innerHTML=`<div class="message-side">${avatarHtml}</div><div class="message-content"><div class="name">${escapeHTML(msg.author)}</div>${bubble}</div>`;}
-  else{div.innerHTML=`<div class="message-content continuation-content">${bubble}</div>`;}
-  messagesBox.appendChild(div);
-}
+function sendMessage(){if(!currentChat)return;const type=document.getElementById("type").value;const text=document.getElementById("messageText").value.trim();const author=type==="me"?"me":document.getElementById("characterSelect").value;const preview=document.getElementById("photoPreview");const photo=preview.classList.contains("visible")?preview.src:"";if(!text&&!photo)return;if(type==="other"&&!author)return;chats[currentChat].push({author,text,type,photo});saveData();openChat(currentChat);document.getElementById("messageText").value="";removePhoto();}
+function makeBubble(msg,other){const bubble=document.createElement("div");bubble.className=`bubble ${other?"other-bubble":"my-bubble"}`;if(msg.text)bubble.appendChild(document.createTextNode(msg.text));if(msg.photo){const image=document.createElement("img");image.className="message-photo";image.src=msg.photo;image.alt="Фото";image.onerror=()=>image.style.display="none";bubble.appendChild(image);}return bubble;}
+function makeAvatar(character,author){const avatar=document.createElement("div");avatar.className="avatar";if(character&&character.photo){avatar.classList.add("avatar-photo");avatar.style.backgroundImage=`url("${character.photo}")`;}else{avatar.textContent=author?author[0].toUpperCase():"";}return avatar;}
+function showMessage(msg,index){const div=document.createElement("div");if(msg.type==="me"){div.className="message me";const content=document.createElement("div");content.className="message-content";content.appendChild(makeBubble(msg,false));div.appendChild(content);messagesBox.appendChild(div);return;}const previous=index>0?chats[currentChat][index-1]:null;const sameContact=previous&&previous.type==="other"&&previous.author===msg.author;const showAuthor=!sameContact;const character=getCharacter(msg.author);div.className="message"+(showAuthor?" message-first":" message-continuation");if(showAuthor){const side=document.createElement("div");side.className="message-side";side.appendChild(makeAvatar(character,msg.author));const content=document.createElement("div");content.className="message-content";const name=document.createElement("div");name.className="name";name.textContent=msg.author;content.appendChild(name);content.appendChild(makeBubble(msg,true));div.appendChild(side);div.appendChild(content);}else{const content=document.createElement("div");content.className="message-content continuation-content";content.appendChild(makeBubble(msg,true));div.appendChild(content);}messagesBox.appendChild(div);}
 function escapeHTML(value){return String(value||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;").replace(/\n/g,"<br>");}
 document.getElementById("messageText").addEventListener("keydown",function(event){if((event.ctrlKey||event.metaKey)&&event.key==="Enter"){event.preventDefault();sendMessage();}});
 document.getElementById("type").addEventListener("change",function(){document.getElementById("characterSelect").disabled=this.value==="me";});
